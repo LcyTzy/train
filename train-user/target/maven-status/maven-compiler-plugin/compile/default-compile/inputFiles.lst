@@ -1,0 +1,13 @@
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\mapper\PassengerMapper.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\service\UserService.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\dto\RegisterRequest.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\dto\PassengerRequest.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\config\SecurityConfig.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\UserApplication.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\mapper\UserMapper.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\dto\LoginRequest.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\entity\Passenger.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\dto\LoginResponse.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\controller\UserController.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\entity\User.java
+E:\code\train\train-user\src\main\java\com\zhenyu\train\user\dto\VerifyRequest.java

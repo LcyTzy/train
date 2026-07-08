@@ -1,0 +1,10 @@
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\entity\Seat.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\TicketApplication.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\controller\TicketController.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\dto\TicketStockResponse.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\service\SeatService.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\service\TicketStockService.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\dto\TicketStockQueryRequest.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\mapper\TicketStockMapper.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\mapper\SeatMapper.java
+E:\code\train\train-ticket\src\main\java\com\zhenyu\train\ticket\entity\TicketStock.java

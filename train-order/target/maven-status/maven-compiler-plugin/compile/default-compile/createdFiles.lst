@@ -1,0 +1,14 @@
+com\zhenyu\train\order\dto\TicketResultResponse.class
+com\zhenyu\train\order\mapper\OrderMapper.class
+com\zhenyu\train\order\entity\OrderDetail.class
+com\zhenyu\train\order\dto\TicketSubmitRequest.class
+com\zhenyu\train\order\dto\TicketSubmitMessage.class
+com\zhenyu\train\order\service\OrderService.class
+com\zhenyu\train\order\consumer\TicketSubmitConsumer.class
+com\zhenyu\train\order\dto\TicketSubmitResponse.class
+com\zhenyu\train\order\dto\OrderDetailCreateRequest.class
+com\zhenyu\train\order\OrderApplication.class
+com\zhenyu\train\order\entity\Order.class
+com\zhenyu\train\order\mapper\OrderDetailMapper.class
+com\zhenyu\train\order\dto\OrderCreateRequest.class
+com\zhenyu\train\order\controller\OrderController.class

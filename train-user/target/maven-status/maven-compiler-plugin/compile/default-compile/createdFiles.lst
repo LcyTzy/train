@@ -1,0 +1,13 @@
+com\zhenyu\train\user\dto\LoginRequest.class
+com\zhenyu\train\user\entity\Passenger.class
+com\zhenyu\train\user\config\SecurityConfig.class
+com\zhenyu\train\user\dto\PassengerRequest.class
+com\zhenyu\train\user\mapper\UserMapper.class
+com\zhenyu\train\user\service\UserService.class
+com\zhenyu\train\user\UserApplication.class
+com\zhenyu\train\user\mapper\PassengerMapper.class
+com\zhenyu\train\user\dto\LoginResponse.class
+com\zhenyu\train\user\controller\UserController.class
+com\zhenyu\train\user\dto\VerifyRequest.class
+com\zhenyu\train\user\entity\User.class
+com\zhenyu\train\user\dto\RegisterRequest.class

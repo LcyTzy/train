@@ -1,0 +1,83 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: train-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        enabled: false
+    gateway:
+      routes:
+        # 用户服务
+        - id: train-user
+          uri: lb://train-user
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=1
+
+        # 车站服务
+        - id: train-train-station
+          uri: lb://train-train
+          predicates:
+            - Path=/api/station/**
+          filters:
+            - StripPrefix=1
+
+        # 车次服务
+        - id: train-train
+          uri: lb://train-train
+          predicates:
+            - Path=/api/train/**
+          filters:
+            - StripPrefix=1
+
+        # 余票服务
+        - id: train-ticket
+          uri: lb://train-ticket
+          predicates:
+            - Path=/api/ticket/**
+          filters:
+            - StripPrefix=1
+
+        # 订单服务
+        - id: train-order
+          uri: lb://train-order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=1
+
+        # 支付服务
+        - id: train-pay
+          uri: lb://train-pay
+          predicates:
+            - Path=/api/pay/**
+          filters:
+            - StripPrefix=1
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+
+logging:
+  level:
+    com.zhenyu.train.gateway: debug

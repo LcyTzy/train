@@ -1,0 +1,10 @@
+{
+	"dataVersion":{
+		"counter":0,
+		"stateVersion":0,
+		"timestamp":1783399410055
+	},
+	"groupTopicMap":{},
+	"offsetTable":{},
+	"pullOffsetTable":{}
+}

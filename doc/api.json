@@ -1,0 +1,545 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "12306购票系统API",
+    "description": "高仿铁路12306购票系统 - 高并发微服务型",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api",
+      "description": "本地开发环境"
+    }
+  ],
+  "tags": [
+    {"name": "用户服务", "description": "User Service"},
+    {"name": "乘客服务", "description": "Passenger Service"},
+    {"name": "车站服务", "description": "Station Service"},
+    {"name": "车次服务", "description": "Train Service"},
+    {"name": "余票服务", "description": "Ticket Stock Service"},
+    {"name": "订单服务", "description": "Order Service"},
+    {"name": "支付服务", "description": "Pay Service"}
+  ],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "用户注册",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password", "phone"],
+                "properties": {
+                  "username": {"type": "string", "description": "用户名"},
+                  "password": {"type": "string", "description": "密码"},
+                  "phone": {"type": "string", "description": "手机号"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/Result"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "用户登录",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": {"type": "string", "description": "用户名/手机号"},
+                  "password": {"type": "string", "description": "密码"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Result"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "token": {"type": "string"},
+                            "userId": {"type": "integer"},
+                            "username": {"type": "string"}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/info": {
+      "get": {
+        "tags": ["用户服务"],
+        "summary": "获取用户信息",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/Result"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/verify": {
+      "post": {
+        "tags": ["用户服务"],
+        "summary": "身份核验",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["realName", "idType", "idNumber"],
+                "properties": {
+                  "realName": {"type": "string", "description": "真实姓名"},
+                  "idType": {"type": "integer", "description": "证件类型: 0-身份证 1-护照 2-军官证"},
+                  "idNumber": {"type": "string", "description": "证件号码"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/passenger/list": {
+      "get": {
+        "tags": ["乘客服务"],
+        "summary": "获取乘客列表(乘车人)",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/passenger/add": {
+      "post": {
+        "tags": ["乘客服务"],
+        "summary": "添加乘客",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "idType", "idNumber"],
+                "properties": {
+                  "name": {"type": "string"},
+                  "idType": {"type": "integer"},
+                  "idNumber": {"type": "string"},
+                  "phone": {"type": "string"},
+                  "passengerType": {"type": "integer", "description": "0-成人 1-儿童 2-学生 3-残疾军人"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/passenger/delete/{id}": {
+      "delete": {
+        "tags": ["乘客服务"],
+        "summary": "删除乘客",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "id", "in": "path", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/station/list": {
+      "get": {
+        "tags": ["车站服务"],
+        "summary": "获取车站列表",
+        "parameters": [
+          {"name": "keyword", "in": "query", "schema": {"type": "string"}, "description": "搜索关键词"}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/train/query": {
+      "get": {
+        "tags": ["车次服务"],
+        "summary": "查询车次(复杂条件查询)",
+        "description": "支持按出发站、到达站、日期、车次类型、出发时间段等条件查询",
+        "parameters": [
+          {"name": "startStation", "in": "query", "required": true, "schema": {"type": "string"}, "description": "出发站名称/编码"},
+          {"name": "endStation", "in": "query", "required": true, "schema": {"type": "string"}, "description": "到达站名称/编码"},
+          {"name": "trainDate", "in": "query", "required": true, "schema": {"type": "string", "format": "date"}, "description": "乘车日期"},
+          {"name": "trainType", "in": "query", "schema": {"type": "integer"}, "description": "车次类型: 1-高铁 2-动车 3-直达 4-特快 5-快速"},
+          {"name": "departTimeStart", "in": "query", "schema": {"type": "string"}, "description": "出发时间段起(如: 12:00)"},
+          {"name": "departTimeEnd", "in": "query", "schema": {"type": "string"}, "description": "出发时间段止"}
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Result"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "trainId": {"type": "integer"},
+                              "trainNo": {"type": "string"},
+                              "trainType": {"type": "integer"},
+                              "startStationName": {"type": "string"},
+                              "endStationName": {"type": "string"},
+                              "departTime": {"type": "string"},
+                              "arriveTime": {"type": "string"},
+                              "duration": {"type": "integer"},
+                              "seatPrices": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "seatType": {"type": "integer"},
+                                    "seatName": {"type": "string"},
+                                    "price": {"type": "number"},
+                                    "availableCount": {"type": "integer"}
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/train/detail/{trainId}": {
+      "get": {
+        "tags": ["车次服务"],
+        "summary": "车次详情(经停站信息)",
+        "parameters": [
+          {"name": "trainId", "in": "path", "required": true, "schema": {"type": "integer"}},
+          {"name": "trainDate", "in": "query", "required": true, "schema": {"type": "string", "format": "date"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/ticket/stock": {
+      "get": {
+        "tags": ["余票服务"],
+        "summary": "查询余票",
+        "parameters": [
+          {"name": "trainId", "in": "query", "required": true, "schema": {"type": "integer"}},
+          {"name": "trainDate", "in": "query", "required": true, "schema": {"type": "string", "format": "date"}},
+          {"name": "startStationId", "in": "query", "required": true, "schema": {"type": "integer"}},
+          {"name": "endStationId", "in": "query", "required": true, "schema": {"type": "integer"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/ticket/submit": {
+      "post": {
+        "tags": ["订单服务"],
+        "summary": "提交购票请求(异步)",
+        "description": "购票请求写入消息队列，异步处理。返回请求编号，前端通过轮询或WebSocket获取结果",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["trainId", "trainDate", "startStationId", "endStationId", "seatType", "passengerIds"],
+                "properties": {
+                  "trainId": {"type": "integer", "description": "车次ID"},
+                  "trainDate": {"type": "string", "format": "date", "description": "乘车日期"},
+                  "startStationId": {"type": "integer", "description": "出发站ID"},
+                  "endStationId": {"type": "integer", "description": "到达站ID"},
+                  "seatType": {"type": "integer", "description": "座位类型"},
+                  "passengerIds": {"type": "array", "items": {"type": "integer"}, "description": "乘客ID列表"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "提交成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Result"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "requestNo": {"type": "string", "description": "请求编号，用于查询结果"}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ticket/result/{requestNo}": {
+      "get": {
+        "tags": ["订单服务"],
+        "summary": "查询购票结果",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "requestNo", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Result"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "status": {"type": "integer", "description": "0-待处理 1-处理中 2-成功 3-失败"},
+                            "orderId": {"type": "integer", "description": "订单ID(成功时返回)"},
+                            "orderNo": {"type": "string", "description": "订单编号(成功时返回)"},
+                            "message": {"type": "string", "description": "结果信息"}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/list": {
+      "get": {
+        "tags": ["订单服务"],
+        "summary": "订单列表",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "status", "in": "query", "schema": {"type": "integer"}, "description": "订单状态筛选"},
+          {"name": "page", "in": "query", "schema": {"type": "integer", "default": 1}},
+          {"name": "size", "in": "query", "schema": {"type": "integer", "default": 10}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/order/detail/{orderNo}": {
+      "get": {
+        "tags": ["订单服务"],
+        "summary": "订单详情",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "orderNo", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/order/cancel/{orderNo}": {
+      "post": {
+        "tags": ["订单服务"],
+        "summary": "取消订单",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "orderNo", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/order/refund/{orderNo}": {
+      "post": {
+        "tags": ["订单服务"],
+        "summary": "退票",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "orderNo", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/pay/create": {
+      "post": {
+        "tags": ["支付服务"],
+        "summary": "创建支付",
+        "security": [{"BearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["orderNo"],
+                "properties": {
+                  "orderNo": {"type": "string", "description": "订单编号"},
+                  "payChannel": {"type": "integer", "description": "支付渠道: 1-微信 2-支付宝", "default": 1}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Result"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "payNo": {"type": "string", "description": "支付流水号"},
+                            "payUrl": {"type": "string", "description": "支付链接/二维码URL"},
+                            "amount": {"type": "number", "description": "支付金额"}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pay/callback": {
+      "post": {
+        "tags": ["支付服务"],
+        "summary": "支付回调(微信/支付宝)",
+        "description": "第三方支付平台回调通知",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payNo": {"type": "string"},
+                  "transactionId": {"type": "string"},
+                  "status": {"type": "integer"},
+                  "sign": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    },
+    "/pay/query/{orderNo}": {
+      "get": {
+        "tags": ["支付服务"],
+        "summary": "查询支付状态",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "orderNo", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {"description": "成功", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Result"}}}}
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Result": {
+        "type": "object",
+        "properties": {
+          "code": {"type": "integer", "description": "状态码: 200-成功, 其他-失败"},
+          "message": {"type": "string", "description": "提示信息"},
+          "data": {"type": "object", "description": "返回数据"}
+        }
+      }
+    }
+  }
+}

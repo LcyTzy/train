@@ -1,0 +1,3 @@
+com\zhenyu\train\gateway\util\JwtUtil.class
+com\zhenyu\train\gateway\filter\AuthFilter.class
+com\zhenyu\train\gateway\GatewayApplication.class

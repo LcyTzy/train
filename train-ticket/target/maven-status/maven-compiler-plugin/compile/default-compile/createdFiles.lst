@@ -1,0 +1,10 @@
+com\zhenyu\train\ticket\entity\Seat.class
+com\zhenyu\train\ticket\TicketApplication.class
+com\zhenyu\train\ticket\controller\TicketController.class
+com\zhenyu\train\ticket\mapper\TicketStockMapper.class
+com\zhenyu\train\ticket\mapper\SeatMapper.class
+com\zhenyu\train\ticket\service\TicketStockService.class
+com\zhenyu\train\ticket\dto\TicketStockResponse.class
+com\zhenyu\train\ticket\service\SeatService.class
+com\zhenyu\train\ticket\entity\TicketStock.class
+com\zhenyu\train\ticket\dto\TicketStockQueryRequest.class
